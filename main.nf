@@ -108,33 +108,41 @@ workflow {
                 }
         }
 
-    chunk_out = MERGE_CONTIG_CHUNK(ch_chunks)
 
-    // FIX: preserve CSI files through to MERGE_CONTIG_FINAL.
-    // Previously csis were silently dropped in the .map(), which meant
-    // MERGE_CONTIG_FINAL received un-indexed VCFs and bcftools merge failed.
+    chunk_out = MERGE_CONTIG_CHUNK(ch_chunks)
+    
+    // Preserve VCF/CSI pairs through the final merge
     final_in = chunk_out.chunk_vcfgz
         .groupTuple()
         .map { contig, vcfs, csis ->
-            // Sort both lists together so VCF/CSI pairs stay aligned
-            def sorted = [vcfs, csis].transpose().sort { a, b -> a[0].name <=> b[0].name }
-            tuple(contig, sorted.collect { it[0] }, sorted.collect { it[1] })
+            def sorted = [vcfs, csis]
+                .transpose()
+                .sort { a, b -> a[0].name <=> b[0].name }
+    
+            tuple(
+                contig,
+                sorted.collect { it[0] },
+                sorted.collect { it[1] }
+            )
         }
-
+    
     final_out = MERGE_CONTIG_FINAL(final_in)
-
-    // FIX: channel was consumed twice (once for vcfs, once for csis).
-    // In Nextflow DSL2 a channel can only be consumed once; the second
-    // .map() on the same channel produced an empty channel, so
-    // CONCAT_ALL_CONTIGS received no CSIs.
-    // Collect all (contig, vcf, csi) tuples first, then split.
-    ch_for_concat = final_out.contig_vcf.collect()
-
-    vcfs_to_concat = ch_for_concat.map { tuples -> tuples.collect { it[1] } }
-    csis_to_concat = ch_for_concat.map { tuples -> tuples.collect { it[2] } }
-
+    
+    // Collect all merged contig VCFs and CSI indexes
+    ch_for_concat = final_out.contig_vcf
+    
+    vcfs_to_concat = ch_for_concat
+        .map { contig, vcf, csi -> vcf }
+        .collect()
+    
+    csis_to_concat = ch_for_concat
+        .map { contig, vcf, csi -> csi }
+        .collect()
+    
     CONCAT_ALL_CONTIGS(vcfs_to_concat, csis_to_concat)
-
+    
     if (params.run_flagstat)
         FLAGSTAT_CRAM(pbgatk_out.cram)
+
+
 }

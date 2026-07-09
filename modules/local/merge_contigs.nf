@@ -93,10 +93,12 @@ process CONCAT_ALL_CONTIGS {
 
     script:
     def vcfList = vcfs instanceof List ? vcfs.sort { it.name } : [vcfs]
-    def vcfArgs = vcfList.collect { it.toString() }.join(' ')
+    def vcfArgs = vcfList.join(' ')
 
     """
-    bcftools concat --threads ${task.cpus} --allow-overlaps -Oz -o watkins_all.vcf.gz ${vcfArgs}
+    bcftools concat --threads ${task.cpus} --allow-overlaps \
+        -Oz -o watkins_all.vcf.gz ${vcfArgs}
+
     bcftools index --threads ${task.cpus} watkins_all.vcf.gz
     """
 }

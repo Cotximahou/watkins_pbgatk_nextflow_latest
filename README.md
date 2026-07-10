@@ -233,7 +233,6 @@ nextflow run main.nf \
 Expected output structure:
 
 - `results/cram/<sample>.cram`
-- `results/vcf/<sample>.vcf`
 - `results/vcfgz/<sample>.vcf.gz`
 - `results/vcfgz/<sample>.vcf.gz.csi`
 - `results/chr/watkins_<contig>.vcf.gz`

@@ -1,7 +1,8 @@
 process PBGATK_GERMLINE {
 
     publishDir "${params.outdir}/cram", mode: 'copy', pattern: '*.cram'
-    publishDir "${params.outdir}/vcf",  mode: 'copy', pattern: '*.vcf'
+    // raw per-sample VCF is kept only as an internal intermediate for compression/indexing
+    // and is not published to results/vcf.
 
     // queue and clusterOptions are set in nextflow.config under withName: PBGATK_GERMLINE
     // to keep resource config centralised and avoid duplication.

@@ -1,0 +1,11 @@
+
+.nextflow.log:1548:  error [nextflow.exception.ProcessFailedException]: Process `PBGATK_GERMLINE (7)` terminated with an error exit status (255)
+.nextflow.log:1551:Jul-13 15:03:53.782 [TaskFinalizer-8] ERROR nextflow.processor.TaskProcessor - Error executing process > 'PBGATK_GERMLINE (7)'
+.nextflow.log:1554:  Process `PBGATK_GERMLINE (7)` terminated with an error exit status (255)
+.nextflow.log:1581:      echo "ERROR: Less than 200 GB of scratch space available (${AVAIL_GB} GB). Aborting."
+.nextflow.log:1614:Command exit status:
+.nextflow.log:1728:Jul-13 15:03:53.787 [TaskFinalizer-8] DEBUG nextflow.Session - Session aborted -- Cause: Process `PBGATK_GERMLINE (7)` terminated with an error exit status (255)
+.nextflow.log:1757:Jul-13 15:03:54.153 [TaskFinalizer-8] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=47; failedCount=1; ignoredCount=0; cachedCount=116; pendingCount=30; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=4; succeedDuration=5d 23h 39m 19s; failedDuration=3d 19h 49m 28s; cachedDuration=16d 6h 33m 57s;loadCpus=0; loadMemory=0; peakRunning=14; peakCpus=144; peakMemory=2.2 TB; ]
+.nextflow.log:1764:Jul-13 15:03:57.091 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=47; failedCount=1; ignoredCount=0; cachedCount=116; pendingCount=30; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=4; succeedDuration=5d 23h 39m 19s; failedDuration=3d 19h 49m 28s; cachedDuration=16d 6h 33m 57s;loadCpus=0; loadMemory=0; peakRunning=14; peakCpus=144; peakMemory=2.2 TB; ]
+.nextflow.log:1768:  error [java.lang.InterruptedException]: java.lang.InterruptedException
+

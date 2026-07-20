@@ -38,6 +38,7 @@ process PBGATK_GERMLINE {
 
     """
     set -euo pipefail
+    set -x
 
     echo "========== ENV =========="
     echo "HOSTNAME=\$(hostname)"

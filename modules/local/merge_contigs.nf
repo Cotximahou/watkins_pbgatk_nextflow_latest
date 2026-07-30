@@ -93,28 +93,11 @@ process CONCAT_ALL_CONTIGS {
 
     script:
     def vcfList = vcfs instanceof List ? vcfs.sort { it.name } : [vcfs]
-    def n = vcfList.size()
     def vcfArgs = vcfList.join(' ')
 
     """
-    if [[ ${n} -eq 1 ]]; then
-        cp ${vcfList[0]} watkins_all.vcf.gz
-    else
-        echo "Validating sample sets for final merge..."
-        ref_samples=$(bcftools query -l ${vcfList[0]} | tr '\n' ',' | sed 's/,$//')
-        echo "Reference sample set from ${vcfList[0]}: ${ref_samples}"
-        for f in ${vcfArgs}; do
-            samples=$(bcftools query -l "$f" | tr '\n' ',' | sed 's/,$//')
-            if [[ "${samples}" != "${ref_samples}" ]]; then
-                echo "ERROR: sample set mismatch between ${vcfList[0]} and $f"
-                echo "  ref: ${ref_samples}"
-                echo "  file: ${samples}"
-                exit 1
-            fi
-        done
-
-        bcftools merge --threads ${task.cpus} -Oz -o watkins_all.vcf.gz ${vcfArgs}
-    fi
+    bcftools concat --threads ${task.cpus} --allow-overlaps \
+        -Oz -o watkins_all.vcf.gz ${vcfArgs}
 
     bcftools index --threads ${task.cpus} watkins_all.vcf.gz
     """
